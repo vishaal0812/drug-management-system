@@ -24,14 +24,14 @@ export default function CustomerList() {
     }, []);
 
     function fetchAllCustomers() {
-        axios(`/customer/getAllCustomers`).then(response => {
+        axios(`/getAllCustomers`).then(response => {
             setAllData(response.data);
             setPageLoading(false);
         })
     }
 
     function handleDelete() {
-        axios.post('/customer/deleteCustomer', {ids: checkedRows.current})
+        axios.post('/deleteCustomer', {ids: checkedRows.current})
             .then(() => fetchAllCustomers());
     }
 
@@ -47,7 +47,7 @@ export default function CustomerList() {
 
     const handleRowProps = (row) => ({
         onDoubleClick: () => {
-            navigate(`/customer/customers/${row.original.id}`);
+            navigate(`/customers/${row.original.id}`);
         }
     })
 

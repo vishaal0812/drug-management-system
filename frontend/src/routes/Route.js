@@ -30,10 +30,10 @@ export const applicationRoutes = [
         path: '/drugs/:drugId',
         element: <DrugPage/>
     },{
-        path: '/customer/customers',
+        path: '/customers',
         element: <CustomerList/>
     },{
-        path: '/customer/customers/:customerId',
+        path: '/customers/:customerId',
         element: <CustomerPage/>
     },{
         path: '/orders',

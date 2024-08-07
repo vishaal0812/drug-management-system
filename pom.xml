@@ -2,8 +2,8 @@
   xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 
   <modelVersion>4.0.0</modelVersion>
-  <groupId>com.drugs-management</groupId>
-  <artifactId>drugs-management</artifactId>
+  <groupId>com.drugs-management-system</groupId>
+  <artifactId>drugs-management-system</artifactId>
   <packaging>pom</packaging>
   <modules>
     <module>backend</module>
