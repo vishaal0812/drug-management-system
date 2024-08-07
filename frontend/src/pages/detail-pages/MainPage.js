@@ -52,10 +52,10 @@ export default function MainPage() {
         <>
             {
                 !currentUser ? <LoginPage loginSuccess={setLoginSuccess}/> :
-                <Card className='m-3 mb-2 scrollbar' style={{backgroundColor: 'lightgray'}}>
+                <Card className='m-3 mb-2' style={{backgroundColor: 'lightgray'}}>
                 <Card.Body>
                     <Card className='mb-1'>
-                        <Card.Body className='p-2'>
+                        <Card.Body className='p-2' style={{backgroundColor: '#f9f9f9'}}>
                             <Row>
                                 <Col md={2}></Col>
                                 <Col md={8} className='d-flex align-items-center justify-content-center'>
@@ -97,7 +97,7 @@ export default function MainPage() {
                         </Col>
                         <Col md={10}>
                             <Card className='ms-3 mt-3 scrollbar' style={{height: '76vh'}}>
-                                <Card.Body className='pb-2 pt-2'>
+                                <Card.Body className='pb-2 pt-2 scrollbar' style={{backgroundColor: '#f9f9f9'}}>
                                     <Routes>
                                         <Route path='/' element={<DashBoard/>}/>
                                         {renderRoutes(applicationRoutes)}

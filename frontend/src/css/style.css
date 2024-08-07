@@ -6,11 +6,12 @@
 
 .scrollbar::-webkit-scrollbar {
     width: 12px;
+
 }
 
 .scrollbar::-webkit-scrollbar-track {
     background: #e0e0e0;
-    border-radius: 10px;
+    border-radius: 5px;
 }
 
 .scrollbar::-webkit-scrollbar-thumb {
@@ -713,7 +714,12 @@ d-flex {
 }
 
 .card {
+    border: none !important;
     box-shadow: 0 7px 14px 0 rgba(65, 69, 88, 0.1), 0 3px 6px 0 rgba(0, 0, 0, 0.07);
+}
+
+.card-body {
+    border-radius: 6px;
 }
 
 .justify-content-start {
@@ -866,7 +872,9 @@ d-flex {
     margin-bottom: 0.5rem;
     font-size: 1rem;
     font-weight: 500;
+    font-color: red;
     display: flex;
+    color: slategrey;
     justify-content: start;
 }
 .form-control-sm {
@@ -958,3 +966,20 @@ d-flex {
     transform-origin: top center;
     animation: ring 2s infinite;
 }
+
+.border-bottom-none {
+    border-bottom: none;
+}
+.notes-card {
+    padding: 10px;
+    margin-bottom: 6px;
+}
+
+.notes-card .card-body{
+    background-color: white;
+    height: 28vh;
+    padding: 5px;
+    border-radius: 5px;
+    text-align: start;
+}
+

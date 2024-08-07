@@ -22,12 +22,12 @@ export default function Settings() {
 
     return(
         <>
-            <Tabs className='pb-2' activeKey={subPage} onSelect={(page) => setSubPage(page.toLowerCase())}>
+            <Tabs className='border-bottom-none' activeKey={subPage} onSelect={(page) => setSubPage(page.toLowerCase())}>
                 {cards.map((card, index) => (
                    <Tab key={index} eventKey={card.toLowerCase()} title={<>{card}<FontAwesomeIcon className='ms-1' icon={icons[index]}/></>}/>
                 ))}
             </Tabs>
-            <Card className='scrollbar' style={{height: '64vh'}}>
+            <Card className='scrollbar' style={{height: '65vh'}}>
                 <Card.Body>
                     {pages[subPage]}
                 </Card.Body>

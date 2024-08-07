@@ -125,10 +125,10 @@ export default function TanStackTable({data, columns, rowProps}) {
                     </Form.Select>
                 </Col>
                 <Col md={4}>
-                    <Button size='sm' variant='falcon-default' className='float-end'
+                    <Button size='sm' variant='light' className='float-end'
                             onClick={() => table.nextPage()}
                             disabled={!table.getCanNextPage()}> next</Button>
-                    <Button size='sm' variant='falcon-default' className='me-1 float-end'
+                    <Button size='sm' variant='light' className='me-1 float-end'
                             onClick={() => table.previousPage()}
                             disabled={!table.getCanPreviousPage()}>previous</Button>
                 </Col>
