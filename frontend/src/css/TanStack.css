@@ -1,0 +1,30 @@
+#tan-stack-table {
+    margin: 3px;
+    padding: 3px;
+    background-color: #a3a3a3;
+    color: whitesmoke;
+    border-radius: 5px;
+}
+
+table {
+    border-collapse: collapse;
+}
+
+tr {
+    border-radius: 10px;
+    border-collapse: collapse;
+}
+
+td {
+    background-color: #f6f6f6;
+    border-color: #f6f6f6;
+    color: #7e7c7c;
+}
+
+.table-row {
+    height: 33px;
+}
+
+tbody {
+    background-color: whitesmoke;
+}
