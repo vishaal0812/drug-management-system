@@ -102,7 +102,7 @@ const ActionDropdown = ({index, notes, handleEdit, handleDelete}) => {
             <div>
                 <DropdownButton position='left' className="float-end" variant="default" size='sm' title={<FontAwesomeIcon icon='list' />}>
                     <Dropdown.Item onClick={() => handleEdit(notes[index].id)}>
-                        <FontAwesomeIcon style={{ color: 'grey' }} className="me-1" icon='edit' />Edit
+                        <FontAwesomeIcon style={{ color: 'blue ' }} className="me-1" icon='edit' />Edit
                     </Dropdown.Item>
                     <Dropdown.Item onClick={() => handleDelete(notes[index].id)}>
                         <FontAwesomeIcon style={{ color: 'red' }} variant='danger'  className="me-1" icon='trash' />Delete
