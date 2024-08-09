@@ -48,7 +48,8 @@ import {
     faUserCircle, 
     faLock,
     faEllipsisVertical,
-    faBook
+    faBook,
+    faMoneyBill
 } from '@fortawesome/free-solid-svg-icons';
 
 library.add(
@@ -100,5 +101,6 @@ library.add(
     faUserCircle,
     faLock,
     faEllipsisVertical,
-    faBook
+    faBook,
+    faMoneyBill
 );

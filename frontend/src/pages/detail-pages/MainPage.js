@@ -13,12 +13,12 @@ export default function MainPage() {
     const TITLE = PAGE_HEADERS;
     const navigationCards = [TITLE.DASHBOARD, TITLE.MANUFACTURER, TITLE.DRUG, TITLE.CUSTOMER, TITLE.ORDER, TITLE.SETTINGS];
     const color = [
-        '#fa5353',
-        '#ffd86c',
-        '#37d5a6',
-        '#fb68ff',
-        '#69fd75',
-        '#5e8ed1'
+        '#f52b2b',
+        '#ffcf4a',
+        '#2fe9c7',
+        '#911cc1',
+        '#34eb42',
+        '#217eff'
     ];
 
     const [currentUser, setCurrentUser] = useState();
@@ -85,9 +85,9 @@ export default function MainPage() {
                         <Col md={2} className='mt-3'>
                             {navigationCards.map((key, index) => (
                                 <Row key={index}>
-                                    <Card className='mx-3 my-2'
-                                         style={{boxShadow: index === pageIndex ? 'rgb(255 255 255) 0px 0px 11px 2px'
-                                                 : '',  backgroundColor: color[index]}}>
+                                    <Card className='mx-3 my-2 p-1'
+                                         style={{boxShadow: index === pageIndex ? '#ffffff 0px 0px 11px 2px'
+                                                 : '',  backgroundColor: color[index], borderRadius: '42px'}}>
                                         <Link to={`/${key.toLowerCase()}`} style={{textDecoration: 'none'}}>
                                             <Card.Body onClick={() => setPageIndex(index)} style={{color: 'white'}}>{key}</Card.Body>
                                         </Link>
@@ -96,7 +96,7 @@ export default function MainPage() {
                             ))}
                         </Col>
                         <Col md={10}>
-                            <Card className='ms-3 mt-3 scrollbar' style={{height: '76vh'}}>
+                            <Card className='ms-3 mt-3 scrollbar' style={{height: '78vh'}}>
                                 <Card.Body className='pb-2 pt-2 scrollbar' style={{backgroundColor: '#f9f9f9'}}>
                                     <Routes>
                                         <Route path='/' element={<DashBoard/>}/>

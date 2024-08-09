@@ -120,7 +120,7 @@ export default function LoginPage({loginSuccess}) {
                              style={{color: 'blue'}}>{MESSAGE.EMAIL_USERNAME_PASSWORD}</Form.Label>}
                 <Row>
                     <Col md={3}>
-                        <Form.Label className='ms-4 mt-1'>{LABEL.USER_NAME}</Form.Label>
+                        <Form.Label className='ms-3 mt-1'>{LABEL.USER_NAME}</Form.Label>
                     </Col>
                     <Col className='me-5 mb-2'>
                         <Form.Control
@@ -131,11 +131,11 @@ export default function LoginPage({loginSuccess}) {
                         <span className='error-msg'>{errors['userName']}</span>
                     </Col>
                 </Row>
-                <Row>
+                <Row className='d-flex'>
                     <Col md={3}>
-                        <Form.Label className='ms-4 mt-1'>{LABEL.PASSWORD}</Form.Label>
+                        <Form.Label className='ms-3 mt-1'>{LABEL.PASSWORD}</Form.Label>
                     </Col>
-                    <Col>
+                    <Col md={9}>
                         <div className='d-flex'>
                             <Form.Control
                                 name='password'
@@ -189,7 +189,7 @@ export default function LoginPage({loginSuccess}) {
             <Modal.Body>
                 <Row>
                     <Col md={3}>
-                        <Form.Label className='ms-4 mt-1'>{LABEL.USER_NAME}</Form.Label>
+                        <Form.Label className='ms-3 mt-1'>{LABEL.USER_NAME}</Form.Label>
                     </Col>
                     <Col className='me-5 mb-2'>
                         <Form.Control
@@ -202,7 +202,7 @@ export default function LoginPage({loginSuccess}) {
                 </Row>
                 <Row>
                 <Col md={3}>
-                        <Form.Label className='ms-4 mt-1'>{LABEL.EMAIL}</Form.Label>
+                        <Form.Label className='ms-3 mt-1'>{LABEL.EMAIL}</Form.Label>
                     </Col>
                     <Col className='me-5 mb-2'>
                         <Form.Control
@@ -215,10 +215,9 @@ export default function LoginPage({loginSuccess}) {
                 </Row>
                 <Row>
                 <Col md={3}>
-                        <Form.Label className='ms-4 mt-1'>{LABEL.PASSWORD}</Form.Label>
+                        <Form.Label className='ms-3 mt-1'>{LABEL.PASSWORD}</Form.Label>
                     </Col>
-
-                    <Col>
+                    <Col md={9}>
                         <div className='d-flex'>
                             <Form.Control
                                 name='password'

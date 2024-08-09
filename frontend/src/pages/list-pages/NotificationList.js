@@ -13,14 +13,21 @@ export default function NotificationList() {
 
     useEffect(() => {
         axios('/getAllNotifications').then((response) => {
-            setNotifications(response.data);
+            const unreadCount = response.data.filter(notification => !notification.isRead).length;
+            const notifications = response.data.sort((a, b) => {
+                if (a.isRead !== b.isRead) {
+                    return a.isRead ? 1 : -1;
+                }
+                return b.id - a.id;
+            })
+            setNotifications(notifications);
             setFilterNotification(response.data);
         });
     },[])
 
     function handleDropDown(index) {
-        if (Number(index) !== 0) {
-            const unreadClicked = Number(index) === 1;
+        if (Number(index) > 0) {
+            const unreadClicked = Number(index) !== 1;
             const filteredNotifications = notifications.filter(item => item.isRead === unreadClicked);
             setFilterNotification(filteredNotifications);
         }else setFilterNotification(notifications);

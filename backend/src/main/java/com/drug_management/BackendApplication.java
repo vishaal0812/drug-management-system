@@ -9,22 +9,21 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @SpringBootApplication()
 public class BackendApplication {
-
-//	@Bean
-//	public WebMvcConfigurer corsConfigurer() {
-//		return new WebMvcConfigurerAdapter() {
-//			@Override
-//			public void addCorsMappings(CorsRegistry registry) {
-//				registry.addMapping("/**")
-//						.allowedOrigins("*")
-//						.allowedMethods("HEAD", "OPTIONS", "GET", "POST", "PUT", "PATCH", "DELETE")
-//						.maxAge(MAX_AGE_SECS);
-//			}
-//		};
-//	}
-
 	public static void main(String[] args) {
 		SpringApplication.run(BackendApplication.class, args);
 	}
 
+//	@Bean
+//	public WebMvcConfigurer webMvcConfigurer() {
+//		return new WebMvcConfigurer() {
+//			@Override
+//			public void addCorsMappings(CorsRegistry registry) {
+//				registry.addMapping("/**")
+//						.allowedOrigins("http://localhost:3000")
+//						.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTION																						S")
+//						.allowedHeaders("*")
+//						.allowCredentials(true);
+//			}
+//		};
+//	}
 }

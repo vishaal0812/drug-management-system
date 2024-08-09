@@ -1,5 +1,5 @@
 import React, {useEffect, useMemo, useRef, useState} from "react";
-import {Button, Col, Form, Row, Card} from "react-bootstrap";
+import {Button, Col, Form, Row, Card, DropdownButton, Dropdown} from "react-bootstrap";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import IconButton from "../../components/IconButton";
 import axios from "axios";
@@ -27,14 +27,16 @@ export default function NotesList() {
         setRowChecked(checkedRows.current.length > 0)
     }
 
-    function handleDelete() {
-        axios.post('/deleteNote', {ids: checkedRows.current})
+    function handleDelete(noteId) {
+        axios.post('/deleteNote', {ids: [noteId]})
             .then(() => getAllNotes());
     }
 
     function getAllNotes() {
-        axios('/getAllNotes')
-            .then((response) => setNotes(response.data));
+        axios('/getAllNotes').then((response) => {
+            const notes = response.data.sort((a, b) => {return(b.id - a.id)});
+            setNotes(notes);
+        });
     }
 
     function handleSaveOrUpdate() {
@@ -45,24 +47,20 @@ export default function NotesList() {
             });
     }
 
-    const handleRowProps = (row) => ({
-        onClick: () => setNewNote(row.original)
-    })
+    function handleEdit(noteId) {
+        const selectedNote = notes.filter((note) => note.id === noteId);
+        setNewNote(selectedNote[0]);
+    }
 
     return(
         <Row>
-            <Col md={8} className='border-end'>
-                <div className='scrollbar' style={{height: '56vh'}}>
+            <Col md={8}>
+                <div className='scrollbar' style={{height: '60vh'}}>
                     {Array(Math.round(notes.length / 2)).fill(null).map((_, index) => (
                         <div key={index} className='d-flex'>
-                            <Card className='notes-card w-50 mx-1'>
-                                <div><FontAwesomeIcon className='float-end m-1 me-2' icon='list'/></div>
-                                <Card.Body className='scrollbar'>{notes[index * 2].note}</Card.Body>
-                            </Card>
-                            {notes[index * 2 + 1] && <Card className='notes-card w-50 mx-1'>
-                                <div><FontAwesomeIcon className='float-end m-1 me-2' icon='list'/></div>
-                                <Card.Body className='scrollbar'>{notes[index * 2].note}</Card.Body>
-                            </Card>}
+                            <ActionDropdown index={index * 2} notes={notes} handleEdit={handleEdit} handleDelete={handleDelete}/>
+                            {notes[index * 2 + 1] &&
+                                <ActionDropdown index={index * 2 + 1} notes={notes} handleEdit={handleEdit}  handleDelete={handleDelete}/>}
                         </div>
                     ))}
                 </div>
@@ -73,27 +71,45 @@ export default function NotesList() {
                     <Col>
                         {newNote['id'] && <IconButton
                             className='float-end'
-                            variant='falcon-danger'
+                            variant='secondary'
                             icon='trash'
                             onClick={() => {
                                 checkedRows.current = [newNote['id']];
                                 setNewNote({});
-                                handleDelete();
+                                handleDelete(newNote['id']);
                             }}
                             toolTip='delete'/>}
                     </Col>
                 </Row>
                 <Form.Control
-                    className='mb-1'
+                    className='mb-2'
                     as='textarea'
                     value={newNote['note'] || ''}
                     rows={12}
-                    onChange={(event) => setNewNote({...newNote, note : event.target.value})}/>
-                <Button className='float-end' variant='success' size='sm' onClick={() => handleSaveOrUpdate()}>
-                    <FontAwesomeIcon className='me-1' icon='check'/>save</Button>
+                    onChange={(event) => {setNewNote({...newNote, note : event.target.value}); console.log('NOTE : ', newNote)}}/>
+                <Button className='float-end' variant='success' size='sm' disabled={!newNote['note']} onClick={() => handleSaveOrUpdate()}>
+                    <FontAwesomeIcon className='me-1' icon='check'/>{newNote['id'] ? 'update' : 'save'}</Button>
                 <Button className='float-end me-1' variant='danger' size='sm' onClick={() => setNewNote({})}>
                     <FontAwesomeIcon className='me-1' icon='times'/>cancel</Button>
             </Col>
         </Row>
     );
 }
+
+const ActionDropdown = ({index, notes, handleEdit, handleDelete}) => {
+    return (
+        <Card onDoubleClick={() => handleEdit(notes[index].id)} className='notes-card w-50 mx-1'>
+            <div>
+                <DropdownButton position='left' className="float-end" variant="default" size='sm' title={<FontAwesomeIcon icon='list' />}>
+                    <Dropdown.Item onClick={() => handleEdit(notes[index].id)}>
+                        <FontAwesomeIcon style={{ color: 'grey' }} className="me-1" icon='edit' />Edit
+                    </Dropdown.Item>
+                    <Dropdown.Item onClick={() => handleDelete(notes[index].id)}>
+                        <FontAwesomeIcon style={{ color: 'red' }} variant='danger'  className="me-1" icon='trash' />Delete
+                    </Dropdown.Item>
+                </DropdownButton>
+            </div>
+            <Card.Body className='scrollbar'>{notes[index].note}</Card.Body>
+        </Card>
+    );
+};

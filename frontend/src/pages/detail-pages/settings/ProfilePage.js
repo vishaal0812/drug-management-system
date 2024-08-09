@@ -99,18 +99,17 @@ export default function ProfilePage() {
         <Modal centered show={resetPassword} onHide={() => handleClosePasswordModal()}>
             <Modal.Header closeButton><Modal.Title>{LABEL.RESET_PASSWORD}</Modal.Title></Modal.Header>
             <Modal.Body>
-                <Row>
+                <Row className='d-flex'>
                     <Col md={5}>
                         <Form.Label>{resetAccess ? LABEL.NEW_PASSWORD : MESSAGE.ENTER_PASSWORD}</Form.Label>
                     </Col>
                     <Col md={7} className='mb-3'>
-                        <div className='d-flex'>
+                        <div className='d-flex align-items-center'>
                             <Form.Control
                                 name='password'
                                 type={showPassword ? 'text' : 'password'}
                                 value={checkPassword.password || ''}
                                 placeholder='Password'
-                                style={{width: '27vw'}}
                                 onChange={(event) => setCheckPassword({...checkPassword, password: event.target.value})}/>
                             <IconButton
                                 className='btn-action-default'
@@ -173,11 +172,12 @@ export default function ProfilePage() {
                 )}
             <Row id='form-page'>
                 <Col md={4}>
-                    <Row>
+                    <Row className='mt-4'>
                         <Col>
                             <Image
                                 src={changedProfile ? URL.createObjectURL(profileData['profile']) :
                                     `data:image/png;base64,${profileData['profile']}`}
+                                style={{border: '2px solid grey'}}
                                 height={250}
                                 width={250}
                                 disabled

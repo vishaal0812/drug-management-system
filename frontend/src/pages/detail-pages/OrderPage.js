@@ -43,8 +43,8 @@ export default function OrderPage() {
 
     useEffect(() => {
         if (params.orderId !== 'new') {
-            setOrderData({...orderData, id : params.orderId});
             getOrderData();
+            setOrderData({...orderData, id : params.orderId});
         }else setNonEditable(false);
         axios('/findAllCustomers').then(response => {
             setCustomers(response.data);
@@ -216,8 +216,8 @@ export default function OrderPage() {
             </Modal.Body>
             <Modal.Footer>
                 <Button size='sm' variant='danger' onClick={() => setShowPaymentModal(false)}><FontAwesomeIcon icon="times" className='me-1'/>{COMMON.CANCEL}</Button>
-                <Button size='sm' variant='secondary' onClick={() => handlePayment('Pending')}>{BANKS.PAY_LATER}</Button>
-                <Button size='sm' variant='success' onClick={() => handlePayment('Paid')}>{BANKS.PAID}</Button>
+                <Button size='sm' variant='secondary' onClick={() => handlePayment('Pending')}><FontAwesomeIcon icon="clock" className='me-1'/>{BANKS.PAY_LATER}</Button>
+                <Button size='sm' variant='success' onClick={() => handlePayment('Paid')}><FontAwesomeIcon icon="money-bill" className='me-1'/>{BANKS.PAID}</Button>
             </Modal.Footer>
         </Modal>
     );
@@ -277,13 +277,6 @@ export default function OrderPage() {
             .then(() => navigate('/orders'));
     }
 
-    function handleEdit() {
-        const customer = customers.filter(customer => customer.id === orderData.customer)[0];
-        if (customer['isDeleted']) {
-            setAlertMessage(`You cannot modify this order, Customer ${customer['fullName']} was aldready deleted.`)
-        }else setNonEditable(false);
-    }
-
     const handleRowProps = (row) => ({
         onDoubleClick: () => {
             if (!nonEditable) {
@@ -297,18 +290,29 @@ export default function OrderPage() {
         <>
             {addDrugModal}
             {handelPaymentPopup}
-            {alertMessage && <SweetAlert title={alertMessage} onConfirm={() => setAlertMessage(null)}/>}
+            {alertMessage &&
+                <SweetAlert
+                    title={alertMessage}
+                    showCancel={true}
+                    cancelBtnBsStyle='secondary'
+                    confirmBtnBsStyle='secondary'
+                    onCancel={() => setAlertMessage(null)}
+                    onConfirm={() => handleDelete()}
+                    confirmBtnText= {LABEL.YES}
+                    cancelBtnText={LABEL.NO}/>}
             <PageLoader loading={pageLoading}/>
             <Row className='d-flex align-items-center ps-0'>
                 <Col md={3} className='ps-0'><h5>{PAGE_HEADERS.ORDER_DETAILS}</h5></Col>
                 <Col md={9}>
+                    {orderData.paymentStatus !== 'Paid' || !customers.filter(customer => customer.id === orderData.customer)[0]['isDeleted'] &&
                     <Button size='sm' className='w-auto float-end' variant={nonEditable ? 'secondary' : 'success'}
-                            onClick={() => {nonEditable ? handleEdit() : handlePlaceOrUpdateOrder()}}>
+                            onClick={() => {nonEditable ? setNonEditable(false) : handlePlaceOrUpdateOrder()}}>
                         <FontAwesomeIcon icon={nonEditable ? 'edit' : 'circle-check'} className='me-1'/>
                         {nonEditable ? COMMON.EDIT : params.orderId !== 'new' ? LABEL.UPDATE_ORDER : LABEL.PLACE_ORDER}
-                    </Button>
+                    </Button>}
                     <Button size='sm' className='w-auto me-2 float-end' variant='danger'
-                            onClick={() => {nonEditable ? handleDelete() :
+                            onClick={() => {nonEditable ? setAlertMessage('Are You Sure, You Want To Delete The Order Of ' +
+                            customers.filter(customer => customer.id === orderData.customer)[0]['fullName']) :
                                 params.orderId === 'new' ? navigate('/orders') : setNonEditable(true); getOrderData()}}>
                         <FontAwesomeIcon icon={nonEditable ? 'trash' : 'times'} className='me-1'/>
                         {nonEditable ? COMMON.DELETE : COMMON.CANCEL}

@@ -807,8 +807,6 @@ d-flex {
 }
 
 .row {
-    --falcon-gutter-x: 2rem;
-    --falcon-gutter-y: 0;
     display: flex;
     flex-wrap: wrap;
 }
@@ -971,13 +969,13 @@ d-flex {
     border-bottom: none;
 }
 .notes-card {
-    padding: 10px;
+    margin: 10px;
     margin-bottom: 6px;
 }
 
 .notes-card .card-body{
     background-color: white;
-    height: 28vh;
+    height: 22vh;
     padding: 5px;
     border-radius: 5px;
     text-align: start;
