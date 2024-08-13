@@ -1,4 +1,4 @@
-import React, {useEffect, useRef, useState} from "react";
+import React, {useEffect, useRef, useState, useContext} from "react";
 import {Button, Col, Form, Image, Modal, Row} from "react-bootstrap";
 import {createInputField} from "../../../helpers/InputFieldHelper";
 import {COMMON_LABELS} from "../../../helpers/Labels";
@@ -9,6 +9,7 @@ import SweetAlert from "react-bootstrap-sweetalert";
 import {MESSAGE} from "../../../helpers/Message";
 import IconButton from "../../../components/IconButton";
 import {checkIsValid, FORMAT, validateFields} from "../../../helpers/Validations";
+import {UserContext} from '../../../helpers/Context';
 
 export default function ProfilePage() {
 
@@ -25,16 +26,15 @@ export default function ProfilePage() {
     const[resetAccess, setResetAccess] = useState(false);
     const[changedProfile, setChangedProfile] = useState(false);
     const[checkPassword, setCheckPassword] = useState({});
+    const {currentUser, setCurrentUser} = useContext(UserContext);
 
     useEffect(() => {
         handleProfileData();
     }, []);
 
     function handleProfileData() {
-        axios('/getCurrentUser').then((response) => {
-            setProfileData(response.data);
-            setCacheData(response.data);
-        });
+        setProfileData(currentUser);
+        setCacheData(currentUser);
     }
 
     function handleInput(event) {
@@ -58,7 +58,7 @@ export default function ProfilePage() {
             headers: {
                 'Content-Type': 'multipart/form-data'
             }
-        })
+        }).then(response => setCurrentUser(response.data));
     }
 
     function handleResetPassword() {
@@ -180,9 +180,8 @@ export default function ProfilePage() {
                                 style={{border: '2px solid grey'}}
                                 height={250}
                                 width={250}
-                                disabled
                                 roundedCircle aria-readonly={false}
-                                onDoubleClick={() => uploadRef.current.click()}/>
+                                onDoubleClick={() => !nonEditable && uploadRef.current.click()}/>
                         </Col>
                     </Row>
                 </Col>
@@ -207,6 +206,7 @@ export default function ProfilePage() {
                                             setAlertMessage(MESSAGE.LOG_OUT);
                                         }else {
                                             setNotEditable(true);
+                                            setChangedProfile(false);
                                             handleProfileData();
                                         }
                                     }}>

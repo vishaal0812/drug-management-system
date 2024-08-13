@@ -23,16 +23,6 @@ export default function ManufacturerList() {
         fetchAllManufacturers();
     }, []);
 
-    function handleCheckBox(row) {
-        const rowId = row.original.id;
-        if (checkedRows.current.includes(rowId)) {
-            checkedRows.current = checkedRows.current.filter(existId => existId !== rowId);
-        } else {
-            checkedRows.current = [...checkedRows.current, rowId];
-        }
-        setRowChecked(checkedRows.current.length > 0)
-    }
-
     function fetchAllManufacturers() {
         axios('/getAllManufacturers')        
             .then(response => {
@@ -49,31 +39,6 @@ export default function ManufacturerList() {
     const data = React.useMemo(() => listData, [listData]);
     const columnHelper = createColumnHelper();
     const columns = useMemo(() => [
-        {
-            id: 'select',
-            header: ({ table }) => (
-                <>
-                    <TanStackCheckbox
-                        {...{
-                            checked: table.getIsAllRowsSelected(),
-                            indeterminate: table.getIsSomeRowsSelected(),
-                            onChange: table.getToggleAllRowsSelectedHandler(),
-                        }}/>
-                </>
-            ),
-            cell: ({ row }) => (
-                <div className="px-1">
-                    <TanStackCheckbox
-                        {...{
-                            checked: row.getIsSelected(),
-                            disabled: !row.getCanSelect(),
-                            indeterminate: row.getIsSomeSelected(),
-                            onChange: row.getToggleSelectedHandler(),
-                        }}
-                    />
-                </div>
-            ),
-        },
         columnHelper.accessor('fullName', {
             header: LABEL.FULL_NAME.toUpperCase(),
             cell: info => info.getValue(),

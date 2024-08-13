@@ -1,5 +1,6 @@
 package com.drug_management.controller;
 
+import com.drug_management.manager.UserManager;
 import com.drug_management.modal.User;
 import com.drug_management.repository.UserRepository;
 import com.drug_management.service.EmailSender;
@@ -25,21 +26,12 @@ public class UserController {
     @Autowired
     EmailSender emailSender;
 
+    @Autowired
+    UserManager userManager;
+
     @GetMapping("/getCurrentUser")
     private Map<String, Object> getCurrentUser() {
-        List<User> users = userRepository.findByActive(true);
-        User user = null;
-        if (!users.isEmpty()) {
-            user = users.get(0);
-            Map<String, Object> result = new HashMap<>();
-            result.put("id", user.getId());
-            result.put("userName", user.getUserName());
-            result.put("password", user.getPassword());
-            result.put("email", user.getEmail());
-            result.put("profile", Base64.getEncoder().encodeToString(user.getProfile()));
-            return result;
-        }
-        return new HashMap<>();
+        return userManager.getCurrentUser();
     }
 
     @PostMapping("/userLogin")
@@ -67,7 +59,7 @@ public class UserController {
     }
 
     @PostMapping("/createAndUpdateUser")
-    private String createUser(@RequestParam(value = "profile", required = false) MultipartFile profile,
+    private Map<String, Object> createUser(@RequestParam(value = "profile", required = false) MultipartFile profile,
                               @RequestParam Map<String, Object> body) throws IOException {
         User user = new User();
         if (body.containsKey("id")) {
@@ -75,10 +67,10 @@ public class UserController {
         }else {
             List<User> existingUsers = userRepository.findByEmail(body.get("email").toString());
             if (!existingUsers.isEmpty())
-                return "User Email " + body.get("email") + " Already Exist";
+                return Map.of("error", "User Email " + body.get("email") + " Already Exist");
             existingUsers = userRepository.findByUserName(body.get("userName").toString());
             if (!existingUsers.isEmpty())
-                return "User Name " + body.get("userName") + " Already Exist";
+                return Map.of("error", "User Name " + body.get("userName") + " Already Exist");
             Path path = Paths.get(body.get("profile").toString());
             user.setProfile(Files.readAllBytes(path));
         }
@@ -89,8 +81,7 @@ public class UserController {
         user.setEmail(body.get("email").toString());
         user.setPassword(body.get("password").toString());
         userRepository.save(user);
-        System.out.println(user.getProfile());
-        return null;
+        return userManager.getCurrentUser();
     }
 
     @PostMapping("/sendEmailForResetPassword")

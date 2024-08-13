@@ -1,3 +1,5 @@
 import {createContext} from "react";
 
-export let logInContext = createContext();
+export const UserContext = createContext();
+
+export const NotificationContext = createContext();

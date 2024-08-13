@@ -7,7 +7,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-@SpringBootApplication()
+@SpringBootApplication(exclude = {
+		SecurityAutoConfiguration.class
+})
 public class BackendApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(BackendApplication.class, args);
@@ -19,8 +21,8 @@ public class BackendApplication {
 //			@Override
 //			public void addCorsMappings(CorsRegistry registry) {
 //				registry.addMapping("/**")
-//						.allowedOrigins("http://localhost:3000")
-//						.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTION																						S")
+//						.allowedOrigins("http://localhost:3001")
+//						.allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
 //						.allowedHeaders("*")
 //						.allowCredentials(true);
 //			}

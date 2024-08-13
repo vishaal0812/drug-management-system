@@ -48,7 +48,8 @@ export default function OrderPage() {
         }else setNonEditable(false);
         axios('/findAllCustomers').then(response => {
             setCustomers(response.data);
-            setActiveCustomers(response.data.filter(customer => !customer.isDeleted))
+            setActiveCustomers(response.data.filter(customer => !customer.isDeleted));
+            console.log('Customer : ', response.data);
         });
         axios('/getAllDrugs').then(response => {setDrugs(response.data.filter(drug => drug.quantityInStock > 0))});
         setPageLoading(false);
@@ -304,7 +305,7 @@ export default function OrderPage() {
             <Row className='d-flex align-items-center ps-0'>
                 <Col md={3} className='ps-0'><h5>{PAGE_HEADERS.ORDER_DETAILS}</h5></Col>
                 <Col md={9}>
-                    {orderData.paymentStatus !== 'Paid' || !customers.filter(customer => customer.id === orderData.customer)[0]['isDeleted'] &&
+                    {(orderData.paymentStatus !== 'Paid') &&
                     <Button size='sm' className='w-auto float-end' variant={nonEditable ? 'secondary' : 'success'}
                             onClick={() => {nonEditable ? setNonEditable(false) : handlePlaceOrUpdateOrder()}}>
                         <FontAwesomeIcon icon={nonEditable ? 'edit' : 'circle-check'} className='me-1'/>

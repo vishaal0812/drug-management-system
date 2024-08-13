@@ -57,7 +57,8 @@ export default function CustomerPage() {
             <Row className='d-flex align-items-center py-0'>
                 <Col md={3} className='ps-0'><h5>{PAGE_HEADERS.CUSTOMER_DETAILS}</h5></Col>
                 <Col md={9}>
-                    <IconButton className='float-end' variant='secondary' icon='list' toolTip='order list'/>
+                    <IconButton className='float-end' variant='secondary' icon='list' toolTip='order list'
+                        onClick={()=> alert('Your Order List Showing Function Is InProgress')}/>
                     <Button size='sm' className='w-auto float-end me-2' variant={nonEditable ? 'secondary' : 'success'}
                             onClick={() => {nonEditable ? setNonEditable(false) : handleSaveOrUpdate()}}>
                         <FontAwesomeIcon icon={nonEditable ? 'edit' : 'circle-check'} className='me-1'/>

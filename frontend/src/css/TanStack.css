@@ -1,7 +1,7 @@
 #tan-stack-table {
     margin: 3px;
     padding: 3px;
-    background-color: #a3a3a3;
+    background: linear-gradient(90deg, #6c757d, #737373);
     color: whitesmoke;
     border-radius: 5px;
 }

@@ -39,9 +39,9 @@ export default function LoginPage({loginSuccess}) {
                 });
             axios.post('/createAndUpdateUser', formData, {
                 headers: {'Content-Type': 'multipart/form-data'}
-            }).then((error) => {
-                if (error.data) {
-                    setAlertMessage(error.data);
+            }).then((response) => {
+                if (response.data.error) {
+                    setAlertMessage(response.data.error);
                 }else {
                     navigate('/settings');
                     loginSuccess(true);

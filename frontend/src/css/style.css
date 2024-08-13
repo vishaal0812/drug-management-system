@@ -870,9 +870,7 @@ d-flex {
     margin-bottom: 0.5rem;
     font-size: 1rem;
     font-weight: 500;
-    font-color: red;
     display: flex;
-    color: slategrey;
     justify-content: start;
 }
 .form-control-sm {
@@ -980,4 +978,19 @@ d-flex {
     border-radius: 5px;
     text-align: start;
 }
-
+.nav {
+    --bs-nav-link-color: none !important;
+    --bs-nav-link-hover-color: none !important;
+}
+.title, .user-name {
+    font-size: 2.5em;
+    background: -webkit-linear-gradient(#fff, #695c5c);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+.user-name{
+    font-style: italic;
+    font-size: 22px;
+    width: 30vh;
+    border-left: 2px solid grey;
+}

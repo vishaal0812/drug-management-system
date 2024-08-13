@@ -1,9 +1,9 @@
 import { Card, Col, Dropdown, DropdownButton, Form, Overlay, OverlayTrigger, Row, Tooltip} from "react-bootstrap";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 import IconButton from '../../components/IconButton';
-
+import {NotificationContext} from '../../helpers/Context';
 export default function NotificationList() {
 
     const listOptions = ['All', 'Unread', 'Readed'];
@@ -12,6 +12,7 @@ export default function NotificationList() {
     const [notifications, setNotifications] = useState([]);
     const [filterNotification, setFilterNotification] = useState([]);
     const [checkedRow, setCheckedRows] = useState([]);
+    const { setUnreadContain } = useContext(NotificationContext);
 
     useEffect(() => {
         getAllNotifications();
@@ -26,6 +27,7 @@ export default function NotificationList() {
                 }
                 return b.id - a.id;
             })
+            setUnreadContain(unreadCount > 0);
             setNotifications(notifications);
             setFilterNotification(response.data);
         });

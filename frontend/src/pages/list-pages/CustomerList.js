@@ -54,30 +54,6 @@ export default function CustomerList() {
     const data = React.useMemo(() => Array.isArray(allData) ? allData : [], [allData]);
     const columnHelper = createColumnHelper();
     const columns = useMemo(() => [
-        {
-            id: 'id',
-            header: ({ table }) => (
-                <TanStackCheckbox
-                    {...{
-                        checked: table.getIsAllRowsSelected(),
-                        indeterminate: table.getIsSomeRowsSelected(),
-                        onChange: table.getToggleAllRowsSelectedHandler(),
-                    }}
-                />
-            ),
-            cell: ({ row }) => (
-                <div className="px-1">
-                    <TanStackCheckbox
-                        {...{
-                            checked: row.getIsSelected(),
-                            disabled: !row.getCanSelect(),
-                            indeterminate: row.getIsSomeSelected(),
-                            onChange: row.getToggleSelectedHandler(),
-                        }}
-                    />
-                </div>
-            ),
-        },
         columnHelper.accessor('fullName', {
             header: LABEL.FULL_NAME.toUpperCase(),
             cell: info => info.getValue(),

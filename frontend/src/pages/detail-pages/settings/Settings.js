@@ -27,7 +27,7 @@ export default function Settings() {
                    <Tab key={index} eventKey={card.toLowerCase()} title={<>{card}<FontAwesomeIcon className='ms-1' icon={icons[index]}/></>}/>
                 ))}
             </Tabs>
-            <Card className='scrollbar' style={{height: '68vh'}}>
+            <Card className='scrollbar' style={{height: '68vh', borderRadius: 0}}>
                 <Card.Body>
                     {pages[subPage]}
                 </Card.Body>
