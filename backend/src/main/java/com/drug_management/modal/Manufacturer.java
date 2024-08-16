@@ -33,4 +33,20 @@ public class Manufacturer {
 
     @OneToOne
     private Address address;
+
+    @Override
+    public String toString() {
+        return "Manufacturer{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", middleName='" + middleName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", fullName='" + fullName + '\'' +
+                ", email='" + email + '\'' +
+                ", companyName='" + companyName + '\'' +
+                ", tinNumber=" + tinNumber +
+                ", isDeleted=" + isDeleted +
+                ", address=" + address +
+                '}';
+    }
 }

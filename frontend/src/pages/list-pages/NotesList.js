@@ -53,7 +53,7 @@ export default function NotesList() {
     }
 
     return(
-        <Row>
+        <Row className='m-0 pt-3'>
             <Col md={8}>
                 <div className='scrollbar' style={{height: '60vh'}}>
                     {Array(Math.round(notes.length / 2)).fill(null).map((_, index) => (

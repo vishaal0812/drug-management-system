@@ -67,8 +67,8 @@ export default function ManufacturerList() {
         <Row className='px-3'>
             <PageLoader loading={pageLoading}/>
             <Row>
-                <Col md={2}><h5>{PAGE_HEADERS.MANUFACTURER}</h5></Col>
-                <Col md={10} className='mb-2'>
+                <Col md={3}><h5>{PAGE_HEADERS.MANUFACTURER}</h5></Col>
+                <Col md={9} className='mb-2'>
                     {rowChecked && <IconButton className='float-end' icon='trash' variant='danger'
                                                onClick={() => handleDelete()} toolTip='Delete All'/>}
                     <Link to={'new'}>

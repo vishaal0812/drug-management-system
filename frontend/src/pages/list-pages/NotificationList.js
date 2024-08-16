@@ -27,7 +27,8 @@ export default function NotificationList() {
                 }
                 return b.id - a.id;
             })
-            setUnreadContain(unreadCount > 0);
+            console.log('not : ', unreadCount)
+            setUnreadContain(unreadCount);
             setNotifications(notifications);
             setFilterNotification(response.data);
         });
@@ -76,26 +77,11 @@ export default function NotificationList() {
 
     return(
         <>
-            <Row className="pb-1">
-                <Col md={8}>
+            <Row className="py-2 m-0">
+                <Col md={7}>
                     <Form.Label>Notifications</Form.Label>
                 </Col>
-                <Col md={4}>
-                    {checkedRow[0] &&
-                        <>
-                            <IconButton
-                                className='ms-7'
-                                variant='secondary'
-                                icon='envelope'
-                                toolTip={checkedRow.some(item => item.isRead === true) ? 'Mark All As Unread' : 'Mark All As Read'}
-                                onClick={()=> handleMarkAsReadOrUnRead()}/>
-                            <IconButton
-                                className='ms-1'
-                                variant='secondary'
-                                icon='trash'
-                                toolTip='Delete All'
-                                onClick={()=> handleDelete()}/>
-                        </>}
+                <Col md={5}>
                     <DropdownButton className="float-end me-2" variant="secondary" size='sm'
                         onSelect={(index) => {
                             setOptionIndex(index);
@@ -112,11 +98,26 @@ export default function NotificationList() {
                             </Dropdown.Item>
                         ))}
                     </DropdownButton>
+                    {checkedRow[0] &&
+                        <>
+                            <IconButton
+                                className='float-end mx-1'
+                                variant='secondary'
+                                icon='trash'
+                                toolTip='Delete All'
+                                onClick={()=> handleDelete()}/>
+                            <IconButton
+                                className='float-end'
+                                variant='secondary'
+                                icon='envelope'
+                                toolTip={checkedRow.some(item => item.isRead === true) ? 'Mark All As Unread' : 'Mark All As Read'}
+                                onClick={()=> handleMarkAsReadOrUnRead()}/>
+                        </>}
                 </Col>
             </Row>
-            <div className="scrollbar" style={{height: '56vh'}}>
+            <div className="scrollbar" style={{height: '60vh'}}>
                 {filterNotification.map((item) => (
-                    <Card className='my-2' style={{backgroundColor: '#ffff'}} >
+                    <Card className='m-2' style={{background: 'transparent', border: '2px solid #525252'}} >
                         <Row className='d-flex align-items-center mx-1'>
                             <Col md={12}>
                                 <Row className='d-flex align-items-center'>
@@ -128,7 +129,7 @@ export default function NotificationList() {
                                         <Form.Label className={`py-1 fs-9 mb-0 ${!item.isRead && 'fw-bold'}`}>{item.subject}</Form.Label>
                                     </Col>
                                     <Col md={2}>
-                                        <Form.Label className="fs-10 float-end pt-1">{dateFormater(item.time)}</Form.Label>
+                                        <Form.Label className="fs-10 c-w float-end pt-1">{dateFormater(item.time)}</Form.Label>
                                     </Col>
                                 </Row>
                             </Col>

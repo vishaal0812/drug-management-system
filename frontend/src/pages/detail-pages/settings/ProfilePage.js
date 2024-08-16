@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState, useContext} from "react";
-import {Button, Col, Form, Image, Modal, Row} from "react-bootstrap";
+import {Button, Col, Form, Image, Modal, Row, InputGroup} from "react-bootstrap";
 import {createInputField} from "../../../helpers/InputFieldHelper";
 import {COMMON_LABELS} from "../../../helpers/Labels";
 import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
@@ -170,7 +170,7 @@ export default function ProfilePage() {
                         confirmBtnText= {LABEL.YES}
                         cancelBtnText={LABEL.NO}/>
                 )}
-            <Row id='form-page'>
+            <Row id='form-page' className='m-0 pt-3'>
                 <Col md={4}>
                     <Row className='mt-4'>
                         <Col>
@@ -233,17 +233,15 @@ export default function ProfilePage() {
                             <Form.Label className='mt-1'>{LABEL.PASSWORD}</Form.Label>
                         </Col>
                         <Col>
-                            <div className='d-flex'>
+                            <InputGroup>
                                 <Form.Control
                                     type={'password'}
                                     value={profileData['password'] || ''}
-                                    style={{width: '19vw'}}
-                                    className='me-2'
                                     disabled={true}/>
                                 <Button variant='danger' size='sm' onClick={() => setResetPassword(true)}>
                                     <FontAwesomeIcon icon='lock' className='me-1'/>{LABEL.RESET_PASSWORD}
                                 </Button>
-                            </div>
+                            </InputGroup>
                         </Col>
                     </Row>
                 </Col>

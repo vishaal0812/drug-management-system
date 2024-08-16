@@ -24,6 +24,12 @@ public class ManufacturerController {
 
     @GetMapping("/getAllManufacturers")
     public List<Manufacturer> getAllManufacturers() {
+
+        List<Manufacturer> list = manufacturerRepository.searchManufacturerByText("kumar");
+        for (Manufacturer manufacturer : list) {
+            System.out.println("RESULT : " + manufacturer);
+        }
+
         return manufacturerRepository.getManufacturersByIsDeleted(false);
     }
 
