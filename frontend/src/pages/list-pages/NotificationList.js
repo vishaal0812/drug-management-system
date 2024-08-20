@@ -129,7 +129,7 @@ export default function NotificationList() {
                                         <Form.Label className={`py-1 fs-9 mb-0 ${!item.isRead && 'fw-bold'}`}>{item.subject}</Form.Label>
                                     </Col>
                                     <Col md={2}>
-                                        <Form.Label className="fs-10 c-w float-end pt-1">{dateFormater(item.time)}</Form.Label>
+                                        <Form.Label className="fs-10 color-white float-end pt-1">{dateFormater(item.time)}</Form.Label>
                                     </Col>
                                 </Row>
                             </Col>

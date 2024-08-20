@@ -9,6 +9,7 @@ import axios from "axios";
 import LoginPage from "./LoginPage";
 import bell from '../../assets/img/notification-bell.svg';
 import {UserContext, NotificationContext } from '../../helpers/Context';
+import PageLoader from "../../components/PageLoader";
 
 export default function MainPage() {
 
@@ -27,6 +28,7 @@ export default function MainPage() {
     const [currentUser, setCurrentUser] = useState();
     const [pageIndex, setPageIndex] = useState();
     const [loginSuccess, setLoginSuccess] = useState(false);
+    const [loading, setLoading] = useState(true);
 
     useEffect(() => {
         axios('/getAllNotifications').then((response) => {
@@ -36,8 +38,8 @@ export default function MainPage() {
         axios('/getCurrentUser').then((response) => {
             if (Object.keys(response.data).length > 0) {
                 setCurrentUser(response.data);
-                console.log('count : ', unreadContain)
             }
+            setLoading(false);
         });
     }, [loginSuccess]);
 
@@ -50,6 +52,7 @@ export default function MainPage() {
     return (
         <UserContext.Provider value={{currentUser, setCurrentUser}}>
             <NotificationContext.Provider value={{setUnreadContain}}>
+                <PageLoader loading={loading}/>
                 {!currentUser ? <LoginPage loginSuccess={setLoginSuccess}/> :
                     <>
                         <Row className='m-0' style={{height: '10vh', backgroundColor: 'black', color: 'white'}}>

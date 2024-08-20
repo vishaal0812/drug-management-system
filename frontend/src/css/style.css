@@ -1023,6 +1023,25 @@ d-flex {
     font-weight: bolder;
     height: 28px;
 }
-.c-w{
-    color: #d1d1d1;
+.color-white{
+    color: #d1d1d1 !important;
+}
+.color-red{
+    color: red !important;
+}
+.color-green{
+    color: green !important;
+}
+.color-blue{
+    color: blue !important;
+}
+.color-black{
+    color: black !important;
+}
+.color-grey{
+    color: grey !important;
+}
+.icon-only {
+    background: none !important;
+    border: none !important;
 }

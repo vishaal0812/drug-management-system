@@ -1,7 +1,8 @@
 import React, {useEffect, useState} from 'react';
-import {Button, Col, Row} from "react-bootstrap";
+import {Button, Col, Row, Dropdown} from "react-bootstrap";
 import {COMMON_LABELS, PAGE_HEADERS} from "../../helpers/Labels";
-import {useNavigate, useParams} from "react-router-dom";
+import {dateFormatter} from "../../helpers/Formatter";
+import {useNavigate, useParams, Link} from "react-router-dom";
 import axios from "axios";
 import {createInputField} from "../../helpers/InputFieldHelper";
 import {states} from "../../helpers/IndianStates";
@@ -12,10 +13,15 @@ import {checkIsValid, FORMAT, validateFields} from "../../helpers/Validations";
 export default function CustomerPage() {
 
     const COMMON_LABEL = COMMON_LABELS;
+    const filters = ['All', 'Pending', 'Paid'];
     const [customerData, setCustomerData] = useState({});
     const [cacheData, setCacheData] = useState({});
     const [nonEditable, setNonEditable] = useState(true);
     const [errors, setErrors] = useState({});
+    const [showOrders, setShowOrders] = useState(false);
+    const [orders, setOrders] = useState();
+    const [filterOrders, setFilterOrders] = useState();
+    const [filterIndex, setFilterIndex] = useState(0);
     const params = useParams();
     const navigate = useNavigate();
     const requiredFields = ['firstName', 'lastName', 'email', 'age', 'email',
@@ -28,12 +34,20 @@ export default function CustomerPage() {
             axios(`/getCustomer/${params.customerId}`).then(response => {
                 setCustomerData({...response.data, id : params.customerId});
                 setCacheData({...response.data, id : params.customerId});
+                handleCustomerOrders();
             });
         }else setNonEditable(false);
     }, []);
 
     function handleInput(event) {
-        setCustomerData({...customerData, [event.target.name] : event.target.value})
+        setCustomerData({...customerData, [event.target.name] : event.target.value});
+    }
+
+    function handleCustomerOrders() {
+        axios.post(`/getCustomerOrders/${params.customerId}`).then((response) => {
+            setOrders(response.data);
+            setFilterOrders(response.data);
+        })
     }
 
     function handleSaveOrUpdate() {
@@ -52,13 +66,62 @@ export default function CustomerPage() {
             .then(() => navigate('/customers'));
     }
 
+    function handleMenuFilter() {
+        let filteredOrders = [];
+        if (filterIndex === 0) {
+            setFilterOrders(orders.filter((order) => order.paymentStatus === 'Pending'));
+        }else if (filterIndex === 1) {
+            setFilterOrders(orders.filter((order) => order.paymentStatus === 'Paid'));
+        }else {
+            setFilterOrders(orders);
+        }
+        setFilterIndex(filterIndex === 2 ? 0 : filterIndex + 1);
+    }
+
+    const MenuOption = ({order}) => {
+        const isPaid = order.paymentStatus === 'Paid';
+        return(
+            <Dropdown.Item className='fs-10'>
+                <Link to={'/orders/' + order.id} style={{textDecoration: 'none'}}>
+                    <IconButton
+                        className={'me-1 icon-only p-0 color-' + (isPaid ? 'green':'blue') }
+                        icon={order.paymentStatus === 'Paid' ? 'check-circle':'clock'}/>
+                    <span className='me-1'>{dateFormatter(order.dateOfPurchase)}</span>
+                    <span className={'me-1 color-' + (isPaid ? 'green':'blue')}>
+                        ₹{Number(order.totalAmount).toFixed(2)} {order.paymentStatus}
+                    </span>
+                    <span className='color-grey'>{order.orderDrugs.length + ' items'}</span>
+                </Link>
+           </Dropdown.Item>
+        )
+    }
+
     return (
         <>
             <Row className='d-flex align-items-center py-0'>
-                <Col md={3} className='ps-0'><h5>{PAGE_HEADERS.CUSTOMER_DETAILS}</h5></Col>
-                <Col md={9}>
-                    <IconButton className='float-end' variant='secondary' icon='list' toolTip='order list'
-                        onClick={()=> alert('Your Order List Showing Function Is InProgress')}/>
+                <Col md={9}><h5 className='me-4 float-start'>{PAGE_HEADERS.CUSTOMER_DETAILS}</h5></Col>
+                <Col md={3}>
+                    <Dropdown show={showOrders}>
+                        <IconButton className='float-end' variant='secondary' icon='list' toolTip='orders'
+                            onClick={()=> {
+                                setShowOrders(!showOrders);
+                            }}> Orders</IconButton>
+                        <Dropdown.Menu className='mt-5' style={{margin: '-2rem'}}>
+                            {filterOrders ? <Dropdown.Header className='mb-2'>
+                            {filterIndex < 1 ? 'Orders' : 'Payment ' + filters[filterIndex] + ' Orders'}
+                                <IconButton
+                                    className='icon-only float-end color-grey'
+                                    icon='filter' toolTip='Filter'
+                                    onClick={() => handleMenuFilter()}/>
+                            </Dropdown.Header> :
+                            <Dropdown.Header className='d-flex justify-content-center'>
+                                NO ORDERS PLACED
+                            </Dropdown.Header>}
+                            <div className='scrollbar' style={{width: '100%', height: '25vh'}}>
+                                {filterOrders && filterOrders.map((order) => (<MenuOption order={order}/>))}
+                            </div>
+                        </Dropdown.Menu>
+                    </Dropdown>
                     <Button size='sm' className='w-auto float-end me-2' variant={nonEditable ? 'secondary' : 'success'}
                             onClick={() => {nonEditable ? setNonEditable(false) : handleSaveOrUpdate()}}>
                         <FontAwesomeIcon icon={nonEditable ? 'edit' : 'circle-check'} className='me-1'/>

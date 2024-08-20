@@ -18,7 +18,7 @@ export default function GlobalSearch() {
                     setMenu(response.data);
                 });
             } else setMenu({});
-        }, 200), []
+        }, 500), []
     );
 
     function getRelatedWords(item) {

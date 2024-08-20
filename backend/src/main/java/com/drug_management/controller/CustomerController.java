@@ -4,6 +4,7 @@ import com.drug_management.manager.AddressManager;
 import com.drug_management.manager.OrderManager;
 import com.drug_management.modal.Address;
 import com.drug_management.modal.Customer;
+import com.drug_management.modal.Order;
 import com.drug_management.repository.CustomerRepository;
 import com.drug_management.repository.OrderRepository;
 import com.drug_management.service.EmailSender;
@@ -66,6 +67,12 @@ public class CustomerController {
             result.put("pinCode", customer.getAddress().getPinCode());
         }
         return result;
+    }
+
+    @PostMapping("/getCustomerOrders/{customerId}")
+    public List<Order> getCustomerOrders(@PathVariable()Long customerId) {
+        List<Order> customerOrders = orderRepository.findByCustomerId(customerId);
+        return !customerOrders.isEmpty() ? customerOrders : null;
     }
 
     @PostMapping("/createAndUpdateCustomer")

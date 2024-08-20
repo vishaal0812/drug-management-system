@@ -85,7 +85,7 @@ public class OrderController {
             orderDrugs.add(orderDrug);
         }
         order.setOrderDrugs(orderDrugs);
-//        emailSender.sendBillByEmail(order, orderedDrugs);
+        emailSender.sendBillByEmail(order, orderedDrugs);
         orderRepository.save(order);
         return true;
     }

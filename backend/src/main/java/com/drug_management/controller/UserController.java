@@ -43,7 +43,7 @@ public class UserController {
             users = userRepository.findByUserNameAndEmail(userName, body.get("email").toString());
         }else users = userRepository.findByUserNameAndPassword(userName, password);
         if (!users.isEmpty()) {
-            User user = users.get(0);
+            User user = users.getFirst();
             user.setPassword(password);
             user.setActive(true);
             userRepository.save(user);
@@ -53,7 +53,7 @@ public class UserController {
 
     @PostMapping("/logout")
     private void logout() {
-        User user = userRepository.findByActive(true).get(0);
+        User user = userRepository.findByActive(true).getFirst();
         user.setActive(false);
         userRepository.save(user);
     }
@@ -91,7 +91,7 @@ public class UserController {
         if (!users.isEmpty()) {
             String subject = "Reset Password for Drug Management";
             String emailBody = "Resetting password for drug management login\n" +
-                    "\nUser Name : " + users.get(0).getUserName() +
+                    "\nUser Name : " + users.getFirst().getUserName() +
                     "\nUse this password : " + body.get("password");
             emailSender.sendEmail(toEmail, subject, emailBody);
             return true;

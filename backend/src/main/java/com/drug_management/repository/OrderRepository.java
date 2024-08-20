@@ -15,4 +15,6 @@ public interface OrderRepository extends JpaRepository<Order, Long> {
             "OR CAST(o.total_amount AS varchar) LIKE :text) " +
             "AND o.is_deleted=false")
     List<Order> searchOrderByText(@Param("text") String text);
+
+    List<Order> findByCustomerId(Long customerId);
 }
