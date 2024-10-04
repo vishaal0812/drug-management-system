@@ -122,6 +122,21 @@ public class OrderController {
         return result;
     }
 
+    @PostMapping("/cancelOrder")
+    public boolean cancelOrder(@RequestBody Map<String, Object> body) {
+        Order order = orderRepository.findById(Long.parseLong(body.get("id").toString())).orElse(null);
+        if (order != null) {
+            for (OrderDrug orderDrug : order.getOrderDrugs()) {
+                Drug drug = orderDrug.getDrug();
+                drug.setQuantityInStock(drug.getQuantityInStock() + orderDrug.getQuantity());
+                drugRepository.save(drug);
+            }
+            order.setPaymentStatus("Canceled");
+            orderRepository.save(order);
+        }
+        return true;
+    }
+
     @DeleteMapping("/deleteOrder")
     public boolean deleteOrder(@RequestBody Map<String, Object> body) {
         List<Object> orderIds = (List<Object>) body.get("ids");

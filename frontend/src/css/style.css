@@ -903,6 +903,15 @@ d-flex {
     width: 75% !important;
 }
 
+.w-80 {
+    width: 80% !important;
+}
+
+.w-90 {
+    width: 90% !important;
+}
+
+
 .w-100 {
     width: 100% !important;
 }
@@ -942,7 +951,19 @@ d-flex {
     left: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(237, 237, 237, 0.8);
+    background-color: #fffc;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+.suspense-loading {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: black;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -1004,8 +1025,7 @@ d-flex {
 
 .dropdown-menu {
     max-height: 70vh;
-    min-height: 30vh;
-    width: 20vw;
+    max-width: 20vw;
     background: linear-gradient(325deg, #939191, #ebebeb);
 }
 
@@ -1016,6 +1036,7 @@ d-flex {
 
 .dropdown-item {
     height: 28px;
+    font-size: smaller;
 }
 
 .dropdown-header {
@@ -1043,5 +1064,73 @@ d-flex {
 }
 .icon-only {
     background: none !important;
+    border: none !important;
+}
+
+.cart-slash-icon {
+  background-image: url('../assets/img/card-stash.svg');
+  width: 15px;
+  height: 15px;
+  background-size: cover;
+  display: inline-block;
+}
+
+.notification-card {
+    margin: .5rem;
+    display: flex;
+    justify-content: center;
+    background: transparent !important;
+    border: 2px solid #525252;
+}
+
+.notification-card:hover {
+    background: linear-gradient(45deg, #f1f1f1, #686868) !important;
+    box-shadow:  0 7px 14px 0 grey, 0 3px 6px 0 grey;
+}
+
+.loader {
+  width: 50px;
+  aspect-ratio: 1;
+  border: 2px solid grey;
+  box-sizing: border-box;
+  border-radius: 50%;
+  display: grid;
+  animation: l11 1.5s infinite linear;
+  transform-origin: 50% 80%;
+}
+.loader:before,
+.loader:after {
+  content: "";
+  grid-area: 1/1;
+  border: inherit;
+  border-radius: 50%;
+  animation: inherit;
+  animation-duration: 1s;
+  transform-origin: inherit;
+}
+.loader:after {
+  --s:-1;
+}
+@keyframes l11 {
+   100% {transform:rotate(calc(var(--s,1)*1turn))}
+}
+
+.modal-content, .sweet-alert {
+    background: linear-gradient(350deg, #2e2e2e, #dbdbdb)
+}
+
+.nav-tabs .nav-link.active {
+    background-color: transparent !important;
+    border-color: #767070 !important;
+    border-bottom-color: #b7b7b7 !important;
+}
+
+.nav-tabs {
+    border-bottom-color: #767070 !important;
+    background: transparent !important;
+}
+
+.nav-tabs .nav-link:hover {
+    isolation: none !important;
     border: none !important;
 }

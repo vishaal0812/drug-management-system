@@ -73,7 +73,6 @@ export default function DrugList() {
 
     return (
         <div className='px-3'>
-            <PageLoader loading={pageLoading}/>
             <Row>
                 <Col md={2} className='ps-0'><h5>{PAGE_HEADERS.DRUG}</h5></Col>
                 <Col md={10} className='mb-2'>

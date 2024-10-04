@@ -117,7 +117,7 @@ export default function NotificationList() {
             </Row>
             <div className="scrollbar" style={{height: '60vh'}}>
                 {filterNotification.map((item) => (
-                    <Card className='m-2' style={{background: 'transparent', border: '2px solid #525252'}} >
+                    <Card className='notification-card'>
                         <Row className='d-flex align-items-center mx-1'>
                             <Col md={12}>
                                 <Row className='d-flex align-items-center'>

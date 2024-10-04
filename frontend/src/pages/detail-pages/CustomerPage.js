@@ -80,14 +80,15 @@ export default function CustomerPage() {
 
     const MenuOption = ({order}) => {
         const isPaid = order.paymentStatus === 'Paid';
+        const isCancel = order.paymentStatus === 'Canceled';
         return(
             <Dropdown.Item className='fs-10'>
                 <Link to={'/orders/' + order.id} style={{textDecoration: 'none'}}>
                     <IconButton
-                        className={'me-1 icon-only p-0 color-' + (isPaid ? 'green':'blue') }
+                        className={'me-1 icon-only p-0 color-' + (isPaid ? 'green': isCancel ? 'red' : 'blue') }
                         icon={order.paymentStatus === 'Paid' ? 'check-circle':'clock'}/>
                     <span className='me-1'>{dateFormatter(order.dateOfPurchase)}</span>
-                    <span className={'me-1 color-' + (isPaid ? 'green':'blue')}>
+                    <span className={'me-1 color-' + (isPaid ? 'green': isCancel ? 'red' : 'blue')}>
                         ₹{Number(order.totalAmount).toFixed(2)} {order.paymentStatus}
                     </span>
                     <span className='color-grey'>{order.orderDrugs.length + ' items'}</span>
@@ -99,16 +100,16 @@ export default function CustomerPage() {
     return (
         <>
             <Row className='d-flex align-items-center py-0'>
-                <Col md={9}><h5 className='me-4 float-start'>{PAGE_HEADERS.CUSTOMER_DETAILS}</h5></Col>
-                <Col md={3}>
-                    <Dropdown show={showOrders}>
-                        <IconButton className='float-end' variant='secondary' icon='list' toolTip='orders'
+                <Col md={8}><h5 className='me-4 float-start'>{PAGE_HEADERS.CUSTOMER_DETAILS}</h5></Col>
+                <Col md={4} className='d-flex'>
+                    <Dropdown show={showOrders} className='float-end'>
+                        <IconButton variant='secondary' icon='list' toolTip='orders'
                             onClick={()=> {
                                 setShowOrders(!showOrders);
                             }}> Orders</IconButton>
-                        <Dropdown.Menu className='mt-5' style={{margin: '-2rem'}}>
+                        <Dropdown.Menu className='mt-5' style={{}}>
                             {filterOrders ? <Dropdown.Header className='mb-2'>
-                            {filterIndex < 1 ? 'Orders' : 'Payment ' + filters[filterIndex] + ' Orders'}
+                            {(filterIndex == 1 ? 'Pending' : filterIndex == 2 ? 'Completed' : '') + ' Orders'}
                                 <IconButton
                                     className='icon-only float-end color-grey'
                                     icon='filter' toolTip='Filter'
@@ -122,16 +123,16 @@ export default function CustomerPage() {
                             </div>
                         </Dropdown.Menu>
                     </Dropdown>
-                    <Button size='sm' className='w-auto float-end me-2' variant={nonEditable ? 'secondary' : 'success'}
+                    <Button size='sm' className='w-auto float-end' variant='danger'
+                        onClick={() => { nonEditable ? handleDelete() :
+                            params.customerId === 'new' ? navigate('/customers'): setNonEditable(true); setCustomerData(cacheData)}}>
+                        <FontAwesomeIcon icon={nonEditable ? 'trash' : 'times'} className='me-1'/>
+                        {nonEditable ? COMMON_LABEL.DELETE : COMMON_LABEL.CANCEL}
+                    </Button>
+                    <Button size='sm' className='w-auto float-end' variant={nonEditable ? 'secondary' : 'success'}
                             onClick={() => {nonEditable ? setNonEditable(false) : handleSaveOrUpdate()}}>
                         <FontAwesomeIcon icon={nonEditable ? 'edit' : 'circle-check'} className='me-1'/>
                         {nonEditable ? COMMON_LABEL.EDIT : params.customerId !== 'new' ? COMMON_LABELS.UPDATE : COMMON_LABEL.SAVE}
-                    </Button>
-                    <Button size='sm' className='w-auto me-2 float-end' variant='danger'
-                            onClick={() => { nonEditable ? handleDelete() :
-                                params.customerId === 'new' ? navigate('/customers'): setNonEditable(true); setCustomerData(cacheData)}}>
-                        <FontAwesomeIcon icon={nonEditable ? 'trash' : 'times'} className='me-1'/>
-                        {nonEditable ? COMMON_LABEL.DELETE : COMMON_LABEL.CANCEL}
                     </Button>
                 </Col>
             </Row><hr/>

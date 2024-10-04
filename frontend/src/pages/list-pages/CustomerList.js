@@ -77,7 +77,6 @@ export default function CustomerList() {
 
     return (
         <Row className='px-3'>
-            <PageLoader loading={pageLoading}/>
             <Row>
                 <Col md={2}><h5>{PAGE_HEADERS.CUSTOMER}</h5></Col>
                 <Col md={10} className='mb-2'>

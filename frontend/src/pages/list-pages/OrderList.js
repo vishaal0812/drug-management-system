@@ -1,4 +1,4 @@
-import React, {useEffect, useMemo, useRef, useState} from 'react';
+import React, {Suspense, useEffect, useMemo, useRef, useState} from 'react';
 import {Button, Col, Row} from "react-bootstrap";
 import {COMMON_LABELS, ORDER_LABELS, PAGE_HEADERS} from "../../helpers/Labels";
 import {Link, useNavigate} from "react-router-dom";
@@ -17,7 +17,6 @@ export default function OrderList() {
     const navigate = useNavigate();
     const checkedRows = useRef([]);
     const [listData, setListData] = useState([]);
-    const [pageLoading, setPageLoading] = useState(true);
     const [rowChecked, setRowChecked] = useState(false);
 
     useEffect(() => {
@@ -27,7 +26,6 @@ export default function OrderList() {
     function fetchAllOrders(){
         axios('/getAllOrders').then(response => {
             setListData(response.data);
-            setPageLoading(false);
         });
     }
 
@@ -56,36 +54,55 @@ export default function OrderList() {
         columnHelper.accessor('netAmount', {
             header: ORDER.NET_AMOUNT.toUpperCase(),
             cell: info => info.getValue(),
+            footer: info => {
+                const total = info.table.getRowModel().rows.reduce((sum, row) => {
+                    return sum + row.getValue('netAmount');
+                }, 0);
+                return <span className='fs-10'>₹{total.toFixed(2)}</span>;
+            }
         }),
         columnHelper.accessor('tax', {
             header: ORDER.TAX.toUpperCase(),
-            cell: cell => cell.getValue()
+            cell: cell => cell.getValue(),
+            footer: info => {
+                const total = info.table.getRowModel().rows.reduce((sum, row) => {
+                    return sum + row.getValue('tax');
+                }, 0);
+                return <span className='fs-10'>₹{total.toFixed(2)}</span>;
+            }
         }),
         columnHelper.accessor('totalAmount', {
             header: ORDER.TOTAL_AMOUNT.toUpperCase(),
-            cell: cell => cell.getValue()
+            cell: cell => cell.getValue(),
+            footer: info => {
+                const total = info.table.getRowModel().rows.reduce((sum, row) => {
+                    return sum + row.getValue('netAmount');
+                }, 0);
+                return <span className='fs-10'>₹{total.toFixed(2)}</span>;
+            }
         }),
         columnHelper.accessor('paymentStatus', {
-            header: ORDER.PAYMENT_STATUS.toUpperCase(),
+            header: 'STATUS',
             cell: cell => cell.getValue()})
     ], []);
 
     return (
-        <Row className='px-3'>
-            <PageLoader loading={pageLoading}/>
-            <Row>
-                <Col md={2}><h5>{PAGE_HEADERS.ORDER}</h5></Col>
-                <Col md={10} className='mb-2'>
-                    {rowChecked && <IconButton className='float-end' icon='trash' variant='danger'
-                        onClick={() => handleDelete()} toolTip='Delete All'/>}
-                    <Link to={'new'}>
-                        <Button className='w-auto float-end me-1' size='sm' variant='secondary'>
-                            <FontAwesomeIcon icon='plus' className='me-1'/>{LABEL.CREATE}
-                        </Button>
-                    </Link>
-                </Col>
+        <Suspense fallback={<PageLoader/>}>
+            <Row className='px-3'>
+                <Row>
+                    <Col md={2}><h5>{PAGE_HEADERS.ORDER}</h5></Col>
+                    <Col md={10} className='mb-2'>
+                        {rowChecked && <IconButton className='float-end' icon='trash' variant='danger'
+                            onClick={() => handleDelete()} toolTip='Delete All'/>}
+                        <Link to={'new'}>
+                            <Button className='w-auto float-end me-1' size='sm' variant='secondary'>
+                                <FontAwesomeIcon icon='plus' className='me-1'/>{LABEL.CREATE}
+                            </Button>
+                        </Link>
+                    </Col>
+                </Row>
+                <TanStackTable data={data} columns={columns} rowProps={handleRowProps}/>
             </Row>
-            <TanStackTable data={data} columns={columns} rowProps={handleRowProps}/>
-        </Row>
+        </Suspense>
     );
 }

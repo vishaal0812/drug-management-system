@@ -45,11 +45,9 @@ export default function ManufacturerList() {
         }),
         columnHelper.accessor('email', {
             header: LABEL.EMAIL.toUpperCase(),
-            cell: cell => cell.getValue()
         }),
-        columnHelper.accessor('companyName', {
+        columnHelper.accessor((row) => row.companyName, {
             header: LABEL.MANUFACTURER.COMPANY_NAME.toUpperCase(),
-            cell: cell => cell.getValue()
         }),
         columnHelper.accessor('tinNumber', {
             header: LABEL.MANUFACTURER.TIN_NUMBER.toUpperCase(),
@@ -65,7 +63,6 @@ export default function ManufacturerList() {
 
     return (
         <Row className='px-3'>
-            <PageLoader loading={pageLoading}/>
             <Row>
                 <Col md={3}><h5>{PAGE_HEADERS.MANUFACTURER}</h5></Col>
                 <Col md={9} className='mb-2'>

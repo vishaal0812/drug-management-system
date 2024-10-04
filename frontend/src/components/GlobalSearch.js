@@ -65,7 +65,7 @@ export default function GlobalSearch() {
                     />
                 </InputGroup>
 
-                <Dropdown.Menu className='scrollbar'>
+                <Dropdown.Menu className='scrollbar' style={{width: '44vh'}}>
                     {Object.keys(menu).length === 0 && (
                         <Dropdown.Header className='mt-1 d-flex justify-content-center'>
                             RESULTS NOT FOUND

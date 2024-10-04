@@ -60,7 +60,6 @@ export default function ManufacturerPage() {
 
     return (
         <>
-            <PageLoader loading={pageLoading}/>
             <Row className='d-flex align-items-center py-0'>
                 <Col md={3} className='ps-0'><h5>{PAGE_HEADERS.MANUFACTURER_DETAILS}</h5></Col>
                 <Col md={9}>

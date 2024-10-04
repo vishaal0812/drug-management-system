@@ -1,9 +1,10 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useState, Suspense} from "react";
 import ReactEcharts from "echarts-for-react";
 import Chart from 'react-apexcharts';
 import axios from "axios";
 import {Card, Col, Row} from "react-bootstrap";
 import {DASHBOARD} from "../../helpers/Labels";
+import PageLoader from "../../components/PageLoader";
 
 export default function DashBoard() {
 
@@ -29,7 +30,7 @@ export default function DashBoard() {
     const drugAvailabilitySeries = [{name: "sales", data: available.stocks}];
 
     return (
-        <>
+        <Suspense fallback={<PageLoader/>}>
             <Card className='my-2' style={{backgroundColor: 'white'}}>
                 <Card.Body>
                     <Card.Title>{LABEL.DRUG_AVAILABILITY}</Card.Title>
@@ -52,6 +53,6 @@ export default function DashBoard() {
                         width="960"/>
                 </Card.Body>
             </Card>
-        </>
+        </Suspense>
     );
 }

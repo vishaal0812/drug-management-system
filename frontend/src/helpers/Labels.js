@@ -72,7 +72,7 @@ export const ORDER_LABELS = {
     TAX: 'Tax (18%)',
     TOTAL_AMOUNT: 'Total Amount',
     PRESCRIPTION: 'Prescription',
-    PAYMENT_STATUS: 'Payment Status',
+    STATUS: 'Status',
     PAYMENT_MODE: 'Payment Mode',
     CARD_DETAILS: 'Card Details',
     QUANTITY: 'Quantity Of Drug',

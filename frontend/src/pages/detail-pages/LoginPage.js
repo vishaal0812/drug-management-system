@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useState, useContext} from 'react';
 import {Button, Col, Form, Modal, Row} from "react-bootstrap";
 import IconButton from "../../components/IconButton";
 import axios from "axios";
@@ -10,8 +10,9 @@ import {FontAwesomeIcon} from "@fortawesome/react-fontawesome";
 import {MESSAGE} from "../../helpers/Message";
 import {COMMON_LABELS} from "../../helpers/Labels";
 import PageLoader from "../../components/PageLoader";
+import {UserContext } from '../../helpers/Context';
 
-export default function LoginPage({loginSuccess}) {
+export default function LoginPage() {
 
     const LABEL = COMMON_LABELS;
     const navigate = useNavigate();
@@ -25,6 +26,7 @@ export default function LoginPage({loginSuccess}) {
     const [data, setData] = useState({});
     const [newPassword, setNewPassword] = useState(null);
     const PATTERNS = [FORMAT.USER_NAME, FORMAT.PASSWORD, FORMAT.EMAIL];
+    const { currentUser, setCurrentUser } = useContext(UserContext);
 
     function handleSignIn() {
         const emptyFieldErrors = validateFields(data, ['userName', 'email', 'password']);
@@ -44,7 +46,7 @@ export default function LoginPage({loginSuccess}) {
                     setAlertMessage(response.data.error);
                 }else {
                     navigate('/settings');
-                    loginSuccess(true);
+                    setCurrentUser(response.data);
                 }
             })
         }
@@ -73,12 +75,12 @@ export default function LoginPage({loginSuccess}) {
                 setErrors({password: 'Incorrect password, Enter the correct password'})
             }else {
                 axios.post('/userLogin', data).then((response) => {
-                    if (!response.data) {
+                    if (Object.keys(response.data).length === 0) {
                         setAlertMessage(MESSAGE.USER_DOES_NOT_EXISTS);
                         setData({});
                     } else {
                         navigate('/dashboard');
-                        loginSuccess(true);
+                        setCurrentUser(response.data);
                         setPageLoading(true);
                     }
                 })
@@ -292,8 +294,9 @@ export default function LoginPage({loginSuccess}) {
 
     return (
         <>
+            {console.log('user: ', currentUser)}
             {alertMessage && <SweetAlert onConfirm={() => setAlertMessage(null)} title={alertMessage}/>}
-            <PageLoader loading={pageLoading}/>
+            {pageLoading && <PageLoader/>}
             {loginModal}
             {signInModal}
             {forgotPasswordModal}

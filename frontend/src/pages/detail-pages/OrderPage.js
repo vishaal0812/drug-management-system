@@ -31,6 +31,7 @@ export default function OrderPage() {
     const [newDrug, setNewDrug] =useState({});
     const [editDrug, setEditDrug] =useState(false);
     const [pageLoading, setPageLoading] = useState(true);
+    const [cancelOrder, setCancelOrder] = useState(false);
     const [nonEditable, setNonEditable] = useState(true);
     const [orderData, setOrderData] = useState({dateOfPurchase: new Date().toISOString().substring(0, 10)});
     const [customers, setCustomers] = useState([]);
@@ -152,7 +153,7 @@ export default function OrderPage() {
             if (preData.drug.quantityInStock >= newDrug.quantity) {
                 setSelectedDrugs(finalList);
                 setShowDrugModal(false);
-                setOrderData({...orderData, netAmount: amount, tax: tax.toFixed(2), totalAmount: amount + tax});
+                setOrderData({...orderData, netAmount: amount, tax: tax.toFixed(2), totalAmount: (amount + tax).toFixed(2)});
             }else setErrors({quantity: `Quantity out of stock, Only ${preData.drug.quantityInStock} stocks are available`});
         }else {
             setErrors(validateFields(newDrug, ['drug', 'quantity']));
@@ -164,7 +165,7 @@ export default function OrderPage() {
         const drugList = selectedDrugs.filter(drug => drug.drugId !== id);
         const amount = drugList.reduce((total, drug) => total + drug.amount, 0);
         const tax = amount / 100 * 18;
-        setOrderData({...orderData, netAmount: amount, tax: tax.toFixed(2), totalAmount: amount + tax});
+        setOrderData({...orderData, netAmount: amount, tax: tax.toFixed(2), totalAmount: (amount + tax).toFixed(2)});
         setSelectedDrugs(drugList);
     }
 
@@ -278,6 +279,15 @@ export default function OrderPage() {
             .then(() => navigate('/orders'));
     }
 
+    function handleCancelOrder() {
+        axios.post('/cancelOrder', {id: params.orderId})
+            .then(() => {
+                setCancelOrder(false);
+                setAlertMessage(null);
+                navigate('/orders')
+            });
+    }
+
     const handleRowProps = (row) => ({
         onDoubleClick: () => {
             if (!nonEditable) {
@@ -295,29 +305,39 @@ export default function OrderPage() {
                 <SweetAlert
                     title={alertMessage}
                     showCancel={true}
-                    cancelBtnBsStyle='secondary'
-                    confirmBtnBsStyle='secondary'
+                    cancelBtnBsStyle='danger'
+                    confirmBtnBsStyle='success'
                     onCancel={() => setAlertMessage(null)}
-                    onConfirm={() => handleDelete()}
+                    onConfirm={() => cancelOrder ? handleCancelOrder() : handleDelete()}
                     confirmBtnText= {LABEL.YES}
-                    cancelBtnText={LABEL.NO}/>}
-            <PageLoader loading={pageLoading}/>
+                    cancelBtnText={'NO'}/>}
+            {pageLoading && <PageLoader/>}
             <Row className='d-flex align-items-center ps-0'>
-                <Col md={3} className='ps-0'><h5>{PAGE_HEADERS.ORDER_DETAILS}</h5></Col>
+                <Col md={3} className='ps-0 justify-content-center'><h5>{PAGE_HEADERS.ORDER_DETAILS}</h5></Col>
                 <Col md={9}>
-                    {(orderData.paymentStatus !== 'Paid') &&
+                    {(orderData.paymentStatus !== 'Paid' && orderData.paymentStatus !== 'Canceled') &&
                     <Button size='sm' className='w-auto float-end' variant={nonEditable ? 'secondary' : 'success'}
                             onClick={() => {nonEditable ? setNonEditable(false) : handlePlaceOrUpdateOrder()}}>
                         <FontAwesomeIcon icon={nonEditable ? 'edit' : 'circle-check'} className='me-1'/>
                         {nonEditable ? COMMON.EDIT : params.orderId !== 'new' ? LABEL.UPDATE_ORDER : LABEL.PLACE_ORDER}
                     </Button>}
-                    <Button size='sm' className='w-auto me-2 float-end' variant='danger'
+                    <Button size='sm' className='w-auto me-1 float-end' variant='danger'
                             onClick={() => {nonEditable ? setAlertMessage('Are You Sure, You Want To Delete The Order Of ' +
                             customers.filter(customer => customer.id === orderData.customer)[0]['fullName']) :
                                 params.orderId === 'new' ? navigate('/orders') : setNonEditable(true); getOrderData()}}>
                         <FontAwesomeIcon icon={nonEditable ? 'trash' : 'times'} className='me-1'/>
                         {nonEditable ? COMMON.DELETE : COMMON.CANCEL}
                     </Button>
+                    {params.orderId !== 'new' && orderData.paymentStatus === 'Pending' && nonEditable &&
+                    <Button
+                        className='float-end me-1'
+                        size='sm' variant='warning'
+                        onClick={() => {
+                            setCancelOrder(true);
+                            setAlertMessage('Are You Sure, You Want to Cancel this order');
+                        }}>
+                        <div className='cart-slash-icon me-1' />Cancel Order
+                    </Button>}
                 </Col>
             </Row><hr/>
             <Row id='form-page' className='scrollbar'>
@@ -327,7 +347,7 @@ export default function OrderPage() {
                             , selectLabel: 'fullName', value: 'id'},
                         { label: LABEL.PRESCRIPTION, name: 'prescription'},
                         { label: LABEL.PAYMENT_MODE, name: 'paymentMode', options: paymentOptions, selectLabel: 'label', value: 'value'},
-                        { label: LABEL.PAYMENT_STATUS, name: 'paymentStatus', readOnly: true, default: 'Pending'}
+                        { label: LABEL.STATUS, name: 'paymentStatus', readOnly: true, default: 'Pending'}
                     ], handleInput, orderData, errors, nonEditable)}
                 </Col>
                 <Col md={6}>

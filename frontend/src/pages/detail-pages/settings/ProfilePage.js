@@ -42,12 +42,15 @@ export default function ProfilePage() {
     }
 
     function handleLogout() {
-        axios.post('/logout').then(() => navigate('/login'))
+        axios.post('/logout').then(() => {
+            navigate('/login');
+            setCurrentUser(false);
+        });
     }
 
     function handleUpdate(data) {
         const formData = new FormData();
-        formData.append('profile', profileData['profile']);
+        formData.append('profile', profileData['profile'] ? profileData['profile'] : 'frontend/src/assets/img/blank_profile.jpg');
         const userDetails = data ? data : profileData;
         if (userDetails) {
             Object.keys(userDetails).forEach(key => {
@@ -177,11 +180,18 @@ export default function ProfilePage() {
                             <Image
                                 src={changedProfile ? URL.createObjectURL(profileData['profile']) :
                                     `data:image/png;base64,${profileData['profile']}`}
-                                style={{border: '2px solid grey'}}
+                                style={{opacity: !nonEditable ? 1 : 0.8, border: '2px solid grey'}}
                                 height={250}
                                 width={250}
                                 roundedCircle aria-readonly={false}
                                 onDoubleClick={() => !nonEditable && uploadRef.current.click()}/>
+                                <Button className='mt-2' variant='danger' size='sm' onClick={() => {
+                                        const {profile, ...rest} = profileData;
+                                        setProfileData(rest);
+                                        setChangedProfile(false);
+                                    }}>
+                                    <FontAwesomeIcon icon='times'/> Remove Image
+                                </Button>
                         </Col>
                     </Row>
                 </Col>

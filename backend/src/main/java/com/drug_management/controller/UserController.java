@@ -35,7 +35,7 @@ public class UserController {
     }
 
     @PostMapping("/userLogin")
-    private Boolean checkLogin(@RequestBody Map<String, Object> body) {
+    private Map<String, Object> checkLogin(@RequestBody Map<String, Object> body) {
         String userName = body.get("userName").toString();
         String password = body.get("password").toString();
         List<User> users;
@@ -48,7 +48,7 @@ public class UserController {
             user.setActive(true);
             userRepository.save(user);
         }
-        return !users.isEmpty();
+        return getCurrentUser();
     }
 
     @PostMapping("/logout")
@@ -64,7 +64,7 @@ public class UserController {
         User user = new User();
         if (body.containsKey("id")) {
             user = userRepository.findById(Long.valueOf(body.get("id").toString())).orElse(null);
-        }else {
+        } else {
             List<User> existingUsers = userRepository.findByEmail(body.get("email").toString());
             if (!existingUsers.isEmpty())
                 return Map.of("error", "User Email " + body.get("email") + " Already Exist");
@@ -75,8 +75,12 @@ public class UserController {
             user.setProfile(Files.readAllBytes(path));
         }
         assert user != null;
-        if (profile != null && !profile.isEmpty())
+        if (profile != null && !profile.isEmpty()) {
             user.setProfile(profile.getBytes());
+        }else {
+            Path path = Paths.get(body.get("profile").toString());
+            user.setProfile(Files.readAllBytes(path));
+        }
         user.setUserName(body.get("userName").toString());
         user.setEmail(body.get("email").toString());
         user.setPassword(body.get("password").toString());

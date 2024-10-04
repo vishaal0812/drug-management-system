@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {Suspense, useEffect, useState, useContext} from "react";
 import {Card, Col, Image, Row, OverlayTrigger, Tooltip} from "react-bootstrap";
 import { PAGE_HEADERS } from "../../helpers/Labels";
 import GlobalSearch from "../../components/GlobalSearch";
@@ -25,23 +25,16 @@ export default function MainPage() {
     ];
 
     const [unreadContain, setUnreadContain] = useState(0);
-    const [currentUser, setCurrentUser] = useState();
     const [pageIndex, setPageIndex] = useState();
-    const [loginSuccess, setLoginSuccess] = useState(false);
     const [loading, setLoading] = useState(true);
+    const {currentUser} = useContext(UserContext);
 
     useEffect(() => {
         axios('/getAllNotifications').then((response) => {
             const unreadCount = response.data.filter(notification => !notification.isRead).length;
             setUnreadContain(unreadCount);
-        })
-        axios('/getCurrentUser').then((response) => {
-            if (Object.keys(response.data).length > 0) {
-                setCurrentUser(response.data);
-            }
-            setLoading(false);
         });
-    }, [loginSuccess]);
+    }, []);
 
     function renderRoutes(routes) {
         return routes.map((route, index) =>
@@ -50,10 +43,9 @@ export default function MainPage() {
     }
 
     return (
-        <UserContext.Provider value={{currentUser, setCurrentUser}}>
+        <Suspense fallback={<PageLoader/>}>
             <NotificationContext.Provider value={{setUnreadContain}}>
-                <PageLoader loading={loading}/>
-                {!currentUser ? <LoginPage loginSuccess={setLoginSuccess}/> :
+                {!currentUser ? <LoginPage/> :
                     <>
                         <Row className='m-0' style={{height: '10vh', backgroundColor: 'black', color: 'white'}}>
                             <Col md={3} className='p-3 pt-4'>
@@ -83,13 +75,13 @@ export default function MainPage() {
                                 </Link>
                             </Col>
                         </Row>
-                        <Row className='m-0' style={{backgroundColor: 'black', height: '90vh', borderRadius:'0px'}}>
-                            <Col md={2} className='pt-3 p-4' style={{width: '20%'}} >
+                        <Row className='m-0 scrollbar' style={{backgroundColor: 'black', height: '90vh', borderRadius:'0px'}}>
+                            <Col md={2} className='pt- p-4 scrollbar' style={{width: '20%', height: '100%'}} >
                                 {navigationCards.map((key, index) => (
                                     <Row key={index} className='px-2'>
                                         <Card className='my-2'
                                              style={{boxShadow: index === pageIndex ? '#ffffff 0px 0px 11px 2px'
-                                                     : '', background: `linear-gradient(180deg, ${color[index]}, black)`, borderRadius: '42px'}}>
+                                                     : '', background: `linear-gradient(160deg, ${color[index]}, black)`}}>
                                             <Link to={`/${key.toLowerCase()}`} style={{textDecoration: 'none'}}>
                                                 <Card.Body onClick={() => setPageIndex(index)} style={{color: 'white'}}>{key}</Card.Body>
                                             </Link>
@@ -98,7 +90,7 @@ export default function MainPage() {
                                 ))}
                             </Col>
                             <Col md={10} style={{width: '80%'}}>
-                                <Card className='ms-3 mt-3 scrollbar' style={{height: '85vh'}}>
+                                <Card className='mt-3 scrollbar' style={{height: '85vh'}}>
                                     <Card.Body className='pb-2 pt-2 scrollbar' style={{background: 'linear-gradient(256deg, #2e2e2e, #dbdbdb)'}}>
                                         <Routes>
                                             <Route path='/' element={<DashBoard/>}/>
@@ -111,6 +103,6 @@ export default function MainPage() {
                     </>
                 }
             </NotificationContext.Provider>
-        </UserContext.Provider>
+        </Suspense>
     );
 }

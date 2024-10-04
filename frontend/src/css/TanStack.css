@@ -22,9 +22,13 @@ td {
 }
 
 .table-row {
-    height: 33px;
+    height: 36px;
 }
 
 tbody {
     background-color: whitesmoke;
+}
+
+tfoot {
+    height: 10px;
 }
